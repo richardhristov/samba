@@ -1,0 +1,17 @@
+version: "3"
+services:
+  samba:
+    build:
+      context: .
+      args:
+        - "SAMBA_USER:${SAMBA_USER}"
+        - "SAMBA_PASS:${SAMBA_PASS}"
+    restart: always
+    ports:
+      - "137:137"
+      - "138:138"
+      - "139:139"
+      - "445:445"
+    volumes:
+      - ./data/share:/share
+      - ./data/timemachinebackup:/timemachinebackup
