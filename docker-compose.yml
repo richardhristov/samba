@@ -4,8 +4,8 @@ services:
     build:
       context: .
       args:
-        - "SAMBA_USER:${SAMBA_USER}"
-        - "SAMBA_PASS:${SAMBA_PASS}"
+        SAMBA_USER: ${SAMBA_USER}
+        SAMBA_PASS: ${SAMBA_PASS}
     restart: always
     ports:
       - "137:137"
