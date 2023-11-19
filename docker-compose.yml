@@ -15,3 +15,19 @@ services:
     volumes:
       - ./data/share:/share
       - ./data/timemachinebackup:/timemachinebackup
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=3000
+      - PGID=3000
+      - TZ=Etc/UTC
+      - WEBUI_PORT=8080
+    volumes:
+      - ./data/share/torrent-config:/config
+      - ./data/share/Downloads:/downloads
+    ports:
+      - 8080:8080
+      - 6881:6881
+      - 6881:6881/udp
+    restart: always
