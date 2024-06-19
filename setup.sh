@@ -1,7 +1,9 @@
 #!/bin/sh
 
 mkdir -p data/share
-mkdir -p data/share/config
+mkdir -p data/share/torrent-config
+mkdir -p data/share/jellyfin-config
+mkdir -p data/share/jellyfin-cache
 mkdir -p data/share/Downloads
 mkdir -p data/timemachinebackup
 

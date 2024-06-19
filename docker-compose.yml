@@ -31,3 +31,14 @@ services:
       - 6881:6881
       - 6881:6881/udp
     restart: always
+  jellyfin:
+    image: jellyfin/jellyfin
+    user: 3000:3000
+    volumes:
+      - ./data/share/jellyfin-config:/config
+      - ./data/share/jellyfin-cache:/cache
+      - ./data/share/Anime:/media/Anime:ro
+      - ./data/share/Shows:/media/Shows:ro
+      - ./data/share/Movies:/media/Movies:ro
+      - ./data/share/Music:/media/Music:ro
+    restart: always
