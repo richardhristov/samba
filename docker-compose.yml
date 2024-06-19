@@ -54,4 +54,4 @@ services:
       - TZ=Etc/UTC
     volumes:
       - ./data/share/sonarr-config:/config
-      - ./data/share/sonarr-data:/data
+      - ./data/share/Downloads:/downloads
