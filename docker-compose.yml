@@ -42,3 +42,16 @@ services:
       - TZ=Etc/UTC
     volumes:
       - ./data/share/prowlarr-config:/config
+  sonarr:
+    container_name: sonarr
+    image: ghcr.io/hotio/sonarr
+    ports:
+      - "8989:8989"
+    environment:
+      - PUID=3000
+      - PGID=3000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./data/share/sonarr-config:/config
+      - ./data/share/sonarr-data:/data
