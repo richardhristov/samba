@@ -42,6 +42,7 @@ services:
       - TZ=Etc/UTC
     volumes:
       - ./data/share/prowlarr-config:/config
+    restart: always
   sonarr:
     container_name: sonarr
     image: ghcr.io/hotio/sonarr
@@ -55,3 +56,4 @@ services:
     volumes:
       - ./data/share/sonarr-config:/config
       - ./data/share/Downloads:/downloads
+    restart: always
