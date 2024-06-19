@@ -40,4 +40,7 @@ services:
       - ./data/share/Shows:/media/Shows:ro
       - ./data/share/Movies:/media/Movies:ro
       - ./data/share/Music:/media/Music:ro
+    ports: 
+      - 8096:8096
+      - 8920:8920
     restart: always
