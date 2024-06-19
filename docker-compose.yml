@@ -30,3 +30,15 @@ services:
       - 6881:6881
       - 6881:6881/udp
     restart: always
+  prowlarr:
+    container_name: prowlarr
+    image: ghcr.io/hotio/prowlarr
+    ports:
+      - "9696:9696"
+    environment:
+      - PUID=3000
+      - PGID=3000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./data/share/prowlarr-config:/config
