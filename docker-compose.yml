@@ -56,4 +56,6 @@ services:
     volumes:
       - ./data/share/sonarr-config:/config
       - ./data/share/Downloads:/downloads
+      - ./data/share/Anime:/downloads/anime
+      - ./data/share/Shows:/downloads/shows
     restart: always
