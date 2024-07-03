@@ -5,7 +5,7 @@ services:
       args:
         SAMBA_USER: ${SAMBA_USER}
         SAMBA_PASS: ${SAMBA_PASS}
-    restart: always
+    container_name: samba
     ports:
       - "137:137"
       - "138:138"
@@ -14,6 +14,7 @@ services:
     volumes:
       - ./data/share:/share
       - ./data/timemachinebackup:/timemachinebackup
+    restart: always
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
@@ -23,10 +24,26 @@ services:
       - TZ=Etc/UTC
       - WEBUI_PORT=8080
     volumes:
-      - ./data/share/torrent-config:/config
+      - ./data/torrent-config:/config
       - ./data/share/Downloads:/downloads
     ports:
       - 8080:8080
       - 6881:6881
       - 6881:6881/udp
     restart: always
+  syncthing:
+    image: lscr.io/linuxserver/syncthing:latest
+    container_name: syncthing
+    environment:
+      - PUID=3000
+      - PGID=3000
+      - TZ=Etc/UTC
+    volumes:
+      - ./data/syncthing-config:/config
+      - ./data/share/Syncthing:/data
+    ports:
+      - 8384:8384
+      - 22000:22000/tcp
+      - 22000:22000/udp
+      - 21027:21027/udp
+    restart: unless-stopped
