@@ -183,7 +183,7 @@ async function categorizeItems(
 }
 
 // Main function to process files and create symlinks
-async function processFiles(): Promise<void> {
+async function processFiles() {
   console.log("Starting file organization process...");
 
   // TODO clean dead links and empty folders from target
@@ -235,9 +235,21 @@ async function processFiles(): Promise<void> {
 await processFiles();
 
 // Set up cron job to run every 10 minutes
+let running = false;
 const job = new CronJob("*/10 * * * *", async () => {
+  if (running) {
+    console.log("Process already running, skipping");
+    return;
+  }
+  running = true;
   console.log("Running scheduled organization task...");
-  await processFiles();
+  try {
+    await processFiles();
+  } catch (err) {
+    console.error("Error during organization task:", err);
+  } finally {
+    running = false;
+  }
 });
 
 // Start the cron job
