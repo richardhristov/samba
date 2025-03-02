@@ -187,17 +187,16 @@ The categorization should be based on:
 
 Important guidance:
 - Keep folder structures as simple as possible
-- DO NOT create extra subfolders (like "Season 1") unless necessary to avoid duplicate paths
-- Only create subfolders for seasons, movies, specials, etc. when there are multiple items of the same series that need to be distinguished (e.g., both a TV show and a movie of the same title)
-- For standalone content with no duplicates, use the simplest path possible (e.g., "TV Shows/Sasaki and Peeps" instead of "TV Shows/Sasaki and Peeps/Season 1")
-- Process all the items without skipping any.
+- Remove underscores from folder names
+- Do not create subfolders, if there are multiple items that would create a duplicate path, output different paths for each like "Anime/Neon Genesis Evangelion" and "Anime/Neon Genesis Evangelion - The End of Evangelion"
+- Process all the items without skipping any
 
 Organize only into the following root folders:
 ${JSON.stringify(allowedFolders)}
 
 Anime contains both anime series and anime movies.
 
-For files, the target path does not include the name of the file.
+For standalone files like software executables and isos, do not include the name of the file in the target path.
 `;
 
 // Function to send items to AI for categorization
