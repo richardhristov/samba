@@ -55,7 +55,7 @@ function markProcessed(p: string) {
 }
 
 // Define filesystem
-async function listRootItems(root: string) {
+async function listItems(root: string) {
   const items = [];
   for await (const entry of Deno.readDir(root)) {
     items.push(
@@ -71,7 +71,7 @@ async function createSymlink(args: {
   sourcePath: string;
   targetBase: string;
   target: string;
-  allowedRootFolders: string[];
+  allowedFolders: string[];
 }) {
   if (!REAL_RUN) {
     console.log(
@@ -80,12 +80,10 @@ async function createSymlink(args: {
     return;
   }
   if (
-    !args.allowedRootFolders.some((folder) =>
-      args.target.startsWith(`${folder}/`)
-    )
+    !args.allowedFolders.some((folder) => args.target.startsWith(`${folder}/`))
   ) {
     console.log(
-      `Skipping ${args.target} because it's not in the allowed root folders`,
+      `Skipping ${args.target} because it's not in the allowed folders`,
     );
     return;
   }
@@ -127,7 +125,7 @@ async function createSymlink(args: {
 }
 
 // Define AI functions
-const allowedRootFolders = [
+const allowedFolders = [
   "Anime",
   "Movies",
   "TV Shows",
@@ -147,10 +145,14 @@ The categorization should be based on:
 3. Any identifiable genres, artists, or series
 
 Organize only into the following root folders:
-${JSON.stringify(allowedRootFolders)}
+${JSON.stringify(allowedFolders)}
+
+Anime contains both anime series and anime movies.
 
 For files, the target path does not include the name of the file.
 Be creative but logical in your categorization.
+
+Do not output duplicate paths among the full list of targets - in the case where there are multiple seasons of a show, or a show and a movie with the same name, you have to output different paths for each. For instance, if there's an anime called "Nichijou..." and an anime movie called "Nichijou...", you could output "Anime/Nichijou/Season 1" and "Anime/Nichijou/Movie" as separate targets. In case you can't figure out which one is which, just add a numbered suffix to the target path.
 `;
 
 // Function to send items to AI for categorization
@@ -172,7 +174,7 @@ async function categorizeItems(
         ),
       }),
       targets: z.array(z.string()).describe(
-        "The target paths where the source item should be linked to, e.g. 'Movies/Nichijou' or 'Anime/Nichijou'. For files, the target path does not include the name of the file.",
+        "The target paths where the source item should be linked to, e.g. 'Movies/Titanic' or 'Anime/Nichijou'. For files, the target path does not include the name of the file.",
       ),
     }),
     messages: [
@@ -189,14 +191,14 @@ async function categorizeItems(
   return object;
 }
 
-// Main function to process files and create symlinks
+// Main functions
 async function processFiles() {
   console.log("Starting file organization process...");
 
   // TODO clean dead links and empty folders from target
 
   // Get root items
-  const allItems = await listRootItems(SOURCE_DIR);
+  const allItems = await listItems(SOURCE_DIR);
 
   // Filter out already processed items
   const unprocessedItems = allItems.filter((item) => !isProcessed(item.name));
@@ -225,7 +227,7 @@ async function processFiles() {
         target: item.source.type === "folder"
           ? target
           : path.join(target, item.source.name),
-        allowedRootFolders,
+        allowedFolders,
       });
     }
     // Mark as processed
