@@ -123,6 +123,47 @@ async function createSymlink(args: {
     );
   }
 }
+async function clean(root: string) {
+  console.log(`Cleaning up ${root}...`);
+
+  // Step 1: Find and delete all symlinks
+  const foundDirs: string[] = [];
+
+  // Walk the directory tree recursively
+  for await (const entry of Deno.readDir(root)) {
+    const path = `${root}/${entry.name}`;
+
+    if (entry.isSymlink) {
+      // Delete symlink
+      try {
+        await Deno.remove(path);
+        console.log(`Removed symlink: ${path}`);
+      } catch (err) {
+        console.error(`Error removing symlink ${path}:`, err);
+      }
+    } else if (entry.isDirectory) {
+      // Track directory for potential deletion later
+      foundDirs.push(path);
+      // Recursively clean subdirectories
+      await clean(path);
+    }
+  }
+
+  // Step 2: Delete empty directories (except the root itself)
+  try {
+    // Check if directory is empty
+    const dirEntries = [];
+    for await (const entry of Deno.readDir(root)) {
+      dirEntries.push(entry);
+    }
+    if (dirEntries.length === 0) {
+      await Deno.remove(root);
+      console.log(`Removed empty directory: ${root}`);
+    }
+  } catch (err) {
+    console.error(`Error checking/removing directory ${root}:`, err);
+  }
+}
 
 // Define AI functions
 const allowedFolders = [
@@ -195,14 +236,11 @@ async function categorizeItems(
 async function processFiles() {
   console.log("Starting file organization process...");
 
-  // TODO clean dead links and empty folders from target
-
   // Get root items
   const allItems = await listItems(SOURCE_DIR);
 
   // Filter out already processed items
   const unprocessedItems = allItems.filter((item) => !isProcessed(item.name));
-
   if (unprocessedItems.length === 0) {
     console.log("No new items to process.");
     return;
@@ -210,10 +248,12 @@ async function processFiles() {
 
   console.log(`Found ${unprocessedItems.length} new items to process.`);
 
+  await clean(TARGET_DIR);
+
   // Categorize items with AI
   const categorizations = await categorizeItems({
     prompt,
-    items: unprocessedItems,
+    items: allItems,
     model: MODEL,
   });
 
