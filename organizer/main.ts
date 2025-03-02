@@ -193,7 +193,9 @@ Anime contains both anime series and anime movies.
 For files, the target path does not include the name of the file.
 Be creative but logical in your categorization.
 
-Do not output duplicate paths among the full list of targets - in the case where there are multiple seasons of a show, or a show and a movie with the same name, you have to output different paths for each. For instance, if there's an anime called "Nichijou..." and an anime movie called "Nichijou...", you could output "Anime/Nichijou/Season 1" and "Anime/Nichijou/Movie" as separate targets. In case you can't figure out which one is which, just add a numbered suffix to the target path.
+Do not output duplicate paths among the full list of targets. When there are multiple seasons of a show, or a show and a movie with the same name, output different paths for each. For instance, if there's an anime called "Nichijou..." and an anime movie called "Nichijou...", you could output "Anime/Nichijou/Season 1" and "Anime/Nichijou/Movie" as separate targets. In case you can't figure out which one is which, just add a numbered suffix to the target path.
+
+You must process all the items without skipping any.
 `;
 
 // Function to send items to AI for categorization
@@ -248,8 +250,6 @@ async function processFiles() {
 
   console.log(`Found ${unprocessedItems.length} new items to process.`);
 
-  await clean(TARGET_DIR);
-
   // Categorize items with AI
   const categorizations = await categorizeItems({
     prompt,
@@ -257,21 +257,34 @@ async function processFiles() {
     model: MODEL,
   });
 
-  // Create symlinks based on AI categorization
+  await clean(TARGET_DIR);
+
+  // Process each categorization
   for (const item of categorizations) {
-    for (const target of item.targets) {
-      const sourcePath = path.join(SOURCE_DIR, item.source.name);
-      await createSymlink({
-        sourcePath,
-        targetBase: TARGET_DIR,
-        target: item.source.type === "folder"
-          ? target
-          : path.join(target, item.source.name),
-        allowedFolders,
-      });
+    try {
+      for (const target of item.targets) {
+        const sourcePath = path.join(SOURCE_DIR, item.source.name);
+        await createSymlink({
+          sourcePath,
+          targetBase: TARGET_DIR,
+          target: item.source.type === "folder"
+            ? target
+            : path.join(target, item.source.name),
+          allowedFolders,
+        });
+      }
+    } catch (err) {
+      console.error(`Error processing categorization ${item}:`, err);
     }
-    // Mark as processed
-    markProcessed(item.source.name);
+  }
+
+  // Mark all items as processed, the AI might have skipped some
+  for (const item of allItems) {
+    try {
+      markProcessed(item.name);
+    } catch (err) {
+      console.error(`Error marking item ${item.name} as processed:`, err);
+    }
   }
 
   console.log("File organization complete.");
