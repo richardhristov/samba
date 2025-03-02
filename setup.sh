@@ -4,6 +4,7 @@ mkdir -p data/share
 mkdir -p data/timemachinebackup
 mkdir -p data/share/Downloads
 mkdir -p data/share/Syncthing
+mkdir -p data/share/Organized
 mkdir -p data/torrent-config
 mkdir -p data/syncthing-config
 

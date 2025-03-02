@@ -1,2 +1,4 @@
 data/
 .env
+_build
+node_modules

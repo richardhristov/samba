@@ -1,7 +1,7 @@
 services:
   samba:
     build:
-      context: .
+      context: ./samba
       args:
         SAMBA_USER: ${SAMBA_USER}
         SAMBA_PASS: ${SAMBA_PASS}
@@ -46,4 +46,15 @@ services:
       - 22000:22000/tcp
       - 22000:22000/udp
       - 21027:21027/udp
+    restart: always
+  organizer:
+    build:
+      context: ./organizer
+    container_name: organizer
+    environment:
+      - MODEL=${MODEL}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+    volumes:
+      - ./data/share/Downloads:/source
+      - ./data/share/Organized:/target
     restart: always
