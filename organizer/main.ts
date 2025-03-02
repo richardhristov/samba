@@ -69,7 +69,7 @@ async function listRootItems(root: string) {
 }
 async function createSymlink(args: {
   sourcePath: string;
-  targetDir: string;
+  targetBase: string;
   target: string;
   allowedRootFolders: string[];
 }) {
@@ -87,8 +87,9 @@ async function createSymlink(args: {
     return;
   }
   // Create parent directories if they don't exist
-  const targetPath = path.join(args.targetDir, args.target);
-  await Deno.mkdir(args.targetDir, { recursive: true });
+  const targetPath = path.join(args.targetBase, args.target);
+  const targetDir = path.dirname(targetPath);
+  await Deno.mkdir(targetDir, { recursive: true });
   // Check if target already exists
   try {
     const targetStat = await Deno.lstat(targetPath);
@@ -220,7 +221,7 @@ async function processFiles() {
       const sourcePath = path.join(SOURCE_DIR, item.source.name);
       await createSymlink({
         sourcePath,
-        targetDir: TARGET_DIR,
+        targetBase: TARGET_DIR,
         target: item.source.type === "folder"
           ? target
           : path.join(target, item.source.name),
