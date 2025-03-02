@@ -115,7 +115,10 @@ async function createSymlink(args: {
     await Deno.symlink(args.sourcePath, targetPath);
     console.log(`Created symlink: ${targetPath} -> ${args.sourcePath}`);
   } catch (err) {
-    console.error(`Error creating symlink ${targetPath}:`, err);
+    console.error(
+      `Error creating symlink ${targetPath} -> ${args.sourcePath}:`,
+      err,
+    );
   }
 }
 
