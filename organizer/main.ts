@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-env --allow-read --allow-write --allow-net
+#!/usr/bin/env -S deno run --allow-env --allow-read --allow-write --allow-net --allow-ffi
 import { generateObject } from "npm:ai@4.1.47";
 import { openrouter } from "npm:@openrouter/ai-sdk-provider@0.4.2";
 import { CronJob } from "npm:cron@4.1.0";
