@@ -182,8 +182,15 @@ for organizing content.
 Given a list of files and folders, categorize them into a logical directory structure. 
 The categorization should be based on:
 1. File/folder name patterns
-2. Potential media type (anime, movies, tv shows, music, software, etc.)
+2. Potential media type
 3. Any identifiable genres, artists, or series
+
+Important guidance:
+- Keep folder structures as simple as possible
+- DO NOT create extra subfolders (like "Season 1") unless necessary to avoid duplicate paths
+- Only create subfolders for seasons, movies, specials, etc. when there are multiple items of the same series that need to be distinguished (e.g., both a TV show and a movie of the same title)
+- For standalone content with no duplicates, use the simplest path possible (e.g., "TV Shows/Sasaki and Peeps" instead of "TV Shows/Sasaki and Peeps/Season 1")
+- Process all the items without skipping any.
 
 Organize only into the following root folders:
 ${JSON.stringify(allowedFolders)}
@@ -191,11 +198,6 @@ ${JSON.stringify(allowedFolders)}
 Anime contains both anime series and anime movies.
 
 For files, the target path does not include the name of the file.
-Be creative but logical in your categorization.
-
-Do not output duplicate paths among the full list of targets. When there are multiple seasons of a show, or a show and a movie with the same name, output different paths for each. For instance, if there's an anime called "Nichijou..." and an anime movie called "Nichijou...", you could output "Anime/Nichijou/Season 1" and "Anime/Nichijou/Movie" as separate targets. In case you can't figure out which one is which, just add a numbered suffix to the target path.
-
-You must process all the items without skipping any.
 `;
 
 // Function to send items to AI for categorization
@@ -231,6 +233,7 @@ async function categorizeItems(
       },
     ],
   });
+  console.log(object);
   return object;
 }
 
