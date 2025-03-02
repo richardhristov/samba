@@ -230,29 +230,31 @@ async function processFiles() {
 
   console.log("File organization complete.");
 }
+async function main() {
+  // Run the process once immediately
+  await processFiles();
 
-// Run the process once immediately
-await processFiles();
+  // Set up cron job to run every 10 minutes
+  let running = false;
+  const job = new CronJob("*/10 * * * *", async () => {
+    if (running) {
+      console.log("Process already running, skipping");
+      return;
+    }
+    running = true;
+    console.log("Running scheduled organization task...");
+    try {
+      await processFiles();
+    } catch (err) {
+      console.error("Error during organization task:", err);
+    } finally {
+      running = false;
+    }
+  });
 
-// Set up cron job to run every 10 minutes
-let running = false;
-const job = new CronJob("*/10 * * * *", async () => {
-  if (running) {
-    console.log("Process already running, skipping");
-    return;
-  }
-  running = true;
-  console.log("Running scheduled organization task...");
-  try {
-    await processFiles();
-  } catch (err) {
-    console.error("Error during organization task:", err);
-  } finally {
-    running = false;
-  }
-});
+  // Start the cron job
+  job.start();
 
-// Start the cron job
-job.start();
-
-console.log("File organizer is running. Press Ctrl+C to exit.");
+  console.log("File organizer is running. Press Ctrl+C to exit.");
+}
+main();
