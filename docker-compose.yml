@@ -55,6 +55,6 @@ services:
       - MODEL=${MODEL}
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
     volumes:
-      - ./data/share/Downloads:/source:ro
-      - ./data/share/Organized:/target
+      - ./data/share/Downloads:/data/share/Downloads:ro
+      - ./data/share/Organized:/data/share/Organized
     restart: always

@@ -203,9 +203,6 @@ async function processFiles() {
   }
 
   console.log(`Found ${unprocessedItems.length} new items to process.`);
-  if (!REAL_RUN) {
-    console.log(unprocessedItems);
-  }
 
   // Categorize items with AI
   const categorizations = await categorizeItems({

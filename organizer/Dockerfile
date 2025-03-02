@@ -10,8 +10,8 @@ COPY . .
 RUN deno cache main.ts
 
 # Set environment variables
-ENV SOURCE_DIR=/source
-ENV TARGET_DIR=/target
+ENV SOURCE_DIR=/data/share/Downloads
+ENV TARGET_DIR=/data/share/Organized
 ENV REAL_RUN=true
 
 # Run the script
