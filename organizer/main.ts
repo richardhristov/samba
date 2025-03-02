@@ -79,7 +79,11 @@ async function createSymlink(args: {
     );
     return;
   }
-  if (!args.target.startsWith(`${args.targetBase}/`)) {
+  if (
+    !args.allowedRootFolders.some((folder) =>
+      args.target.startsWith(`${folder}/`)
+    )
+  ) {
     console.log(
       `Skipping ${args.target} because it's not in the allowed root folders`,
     );
