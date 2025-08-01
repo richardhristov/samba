@@ -1,6 +1,6 @@
-FROM denoland/deno:alpine
+FROM denoland/deno:debian
 
-RUN apk add --no-cache git
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
