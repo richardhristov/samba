@@ -8,4 +8,4 @@ RUN git clone https://github.com/richardhristov/scripts .
 
 COPY cron.conf.json /app/cron.conf.json
 
-CMD ["deno", "run", "--allow-read", "--allow-write", "--allow-run", "--allow-env", "cron.ts", "--config", "cron.conf.json"]
+CMD ["deno", "run", "--allow-read", "--allow-write", "--allow-run", "--allow-env", "--allow-net", "cron.ts", "--config", "cron.conf.json"]
