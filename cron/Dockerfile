@@ -11,8 +11,8 @@ RUN git clone https://github.com/richardhristov/scripts .
 COPY cron.conf.json /app/cron.conf.json
 
 # Pre-download and cache Deno dependencies
-RUN deno cache --lock-write=deno.lock cron.ts
-RUN deno cache --lock-write=deno.lock gallery-update.ts
-RUN deno cache --lock-write=deno.lock grid.ts
+RUN deno cache --lock=deno.lock --lock-write cron.ts
+RUN deno cache --lock=deno.lock --lock-write gallery-update.ts
+RUN deno cache --lock=deno.lock --lock-write grid.ts
 
 CMD ["deno", "run", "--allow-read", "--allow-write", "--allow-run", "--allow-env", "--allow-net", "--lock=deno.lock", "cron.ts", "--config", "cron.conf.json"]
