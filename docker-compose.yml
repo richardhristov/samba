@@ -31,3 +31,12 @@ services:
       - 6881:6881
       - 6881:6881/udp
     restart: always
+  cron:
+    build:
+      context: ./cron
+    container_name: cron
+    ports:
+      - 9990:9990
+    volumes:
+      - ./data/share/Downloads:/downloads
+    restart: always
