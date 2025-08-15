@@ -5,9 +5,9 @@
       "command": "bash",
       "args": [
         "-c",
-        "deno run --allow-read --allow-write --allow-run --allow-env --allow-net gallery-update.ts -p 4 /downloads/gallery-dl && deno run --allow-read --allow-write --allow-run --allow-env --allow-ffi --allow-net grid.ts /downloads/gallery-dl"
+        "deno run --allow-read --allow-write --allow-run --allow-env --allow-net gallery-update.ts -p 8 /downloads/gallery-dl && deno run --allow-read --allow-write --allow-run --allow-env --allow-ffi --allow-net grid.ts /downloads/gallery-dl"
       ],
-      "schedule": "0 5 */5 * *"
+      "schedule": "0 5 */4 * *"
     },
     {
       "command": "bash",
