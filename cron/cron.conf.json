@@ -11,6 +11,14 @@
     },
     {
       "command": "bash",
+      "args": [
+        "-c",
+        "deno run --allow-read --allow-write --allow-run --allow-env --allow-ffi --allow-net grid.ts /downloads/gallery-dl"
+      ],
+      "schedule": "0 1 * * *"
+    },
+    {
+      "command": "bash",
       "args": ["-c", "echo \"Testing cron - $(date)\""],
       "schedule": "* * * * *"
     }
